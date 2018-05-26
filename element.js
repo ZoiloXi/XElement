@@ -50,7 +50,12 @@ class Checkbox {
 				this.selected = Array.prototype.filter.call(this.items, (item) => {
 					return item.checked == true
 				})
-				if (this.selected.length == 0) target.checked = true
+
+				if (this.selected.length == 0) {
+					target.checked = true
+					this.selected = [target]
+				}
+				
 				this.toggleAllCheck()
 			}
 		})
