@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>basic_day34</title>
+	<style type="text/css">
+
+		svg {
+			position: relative;
+		}
+		.bars {
+			fill: steelblue;
+			stroke-width: 1;
+			position: relative;
+			pointer-events: all;
+		}
+		.bars:hover {
+			opacity: 0.5;
+			stroke-color: black;
+			cursor: pointer;
+		}
+		.bars:hover:after {
+			position: absolute;
+			width: 40px;
+			height: 60px;
+			left: 0;
+			top:0;
+			border-radius: 5px;
+			background-color: lightblue;
+			content: attr(data);
+			font-size: 20px;
+			z-index: 10000;	
+		}
+		.tooltip {
+			min-width: 60px;
+			height:auto;
+			padding: 5px 10px;
+			max-width: 180px;
+			border-radius: 5px;
+			background-color: rgba(50, 50, 50, 0.5);
+			z-index: 10000;
+		}
+		g.labels {
+			text-align: right;
+		}
+	</style>
+</head>
+<body>
+
+<svg id="svg" style='width:600px; height:400px' version="1.1" xmlns="http://www.w3.org/2000/svg"></svg>
+<script type="text/javascript" src='./js/barplot.js'></script>
+<script type="text/javascript">
+let log = console.log.bind(console)
+
+let svg = document.getElementById('svg')
+
+let config = {
+	background: 'gray',
+	container: svg,
+	barwidth: 0.8,
+	data: [10, 52, 200, 334, 420, 330, 220],
+	label: ['AA', 'BB', 'CC', 'DD', 'EE', 'FF', 'GG'],
+	grid: 1
+}
+
+let myBarplot = new Barplot(config)
+</script>
+</body>
+</html>

@@ -4,6 +4,7 @@ class Table {
 		this.head = config.head
 		this.caption = config.caption
 		this.table = config.table || document.querySelector('#X-Table')
+		
 		this.render()
 	}
 
