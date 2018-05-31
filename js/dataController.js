@@ -10,6 +10,7 @@ class DataController {
 	}
 
 	getOne (primary, secondary) {
+		// primary == strinng, secondary == string
 		for (let i = 0; i < this.data.length; i++) {
 			if ((primary == this.data[i]['region'] && secondary == this.data[i]['product']) ||
 				(secondary == this.data[i]['region'] && primary == this.data[i]['product']))
@@ -31,6 +32,7 @@ class DataController {
 	}
 
 	reshape (region, product) {
+		// region and product is a Array
 		let result = {}, primary, secondary
 
 		if (region.length == 0) region = this.regions
