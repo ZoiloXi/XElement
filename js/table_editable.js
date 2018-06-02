@@ -92,14 +92,16 @@ class EditTable extends Table {
 		input.addEventListener('keyup', (e) => {
 			let value = input.value.trim(),
 				pass = this.validate(value)
+			log(e.key)
 			switch (e.key) {
 				case 'Enter':
 					value && pass && this.setCellData(panel.parentNode, value)
 					this.resetEditPanel(panel)
 					break
-				case 'Esc':
+				case 'Escape':
 					this.resetEditPanel(panel)
 					panel.parentNode.removeChild(panel)
+					log('ESc')
 					break
 				default:
 					if (!pass) {
