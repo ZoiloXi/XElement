@@ -1,0 +1,64 @@
+
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+
+button.store {
+	width: 200px;
+	height: 50px;
+	font-size: 40px;
+	display: block;
+	margin: 20px auto;
+}
+
+#X-Table {
+	clear: both;
+	text-align: center;
+}
+
+#X-Table table tr:not(first-of-type):hover {
+	background: pink;
+}
+
+#X-Table td {
+	width: 80px;
+	min-width: 80px;
+	height: 30px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#X-Table .rowdata {
+	position: relative;
+}
+
+.edit-panel {
+	position: absolute;
+	width: 80px;
+	height: 30px;
+	top: 0;
+	font-size: 10px;
+	cursor: pointer;
+}
+.edit-input {
+	box-sizing: border-box;
+	width: 79px;
+}
+.edit-input, .edit-identify, .edit-cancel {
+	float: left;
+}
+.edit-identify, .edit-cancel {
+	width: 30px;
+	padding: 1px 2.5px;
+	margin: 1.5px 5px;
+	border-radius: 2.5px;
+	background-color: lightblue;
+}
+.edit-prompt {
+	color: red;
+}
+.edit-switch {
+	float: right;
+}

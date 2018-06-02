@@ -18,9 +18,10 @@ fieldset, svg {
 	background: steelblue;
 }
 
-// barplot
+
 svg {
 	position: relative;
+	zoom: 0.6;
 }
 .bars {
 	fill: steelblue;

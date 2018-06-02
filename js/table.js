@@ -26,11 +26,11 @@ class Table {
 				rowEle += '<tr>'
 
 				if (index == 0) {
-					rowEle += rowspan >= 1 ? `<td rowspan=${rowspan}>${key}</td>` : ''
+					rowEle += rowspan >= 1 ? `<td rowspan=${rowspan} class="rowname">${key}</td>` : ''
 				}
-				rowEle += `<td>${item}</td>`
+				rowEle += `<td class="rowname">${item}</td>`
 				rowEle += current[item].map((sale) => { // 用sale是因为current[item] 是12个月份的销售数据数组
-					return `<td>${sale}</td>`
+					return `<td class='rowdata'>${sale}</td>`
 				}).join('')
 				rowEle += '</tr>'
 			})
