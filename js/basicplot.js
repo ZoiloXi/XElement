@@ -123,11 +123,11 @@ class Basicplot {
 		let title = this.config.title
 		if (Array.isArray(title)) {
 			title = title.join(' ')
-		} else if (Object.prototype.toString.call(title) == '[object Object]') {	// Object.prototype.toString.call(title)
+		} else if (Object.prototype.toString.call(title) == '[object Object]') {
 			title = title.title
 		}
 
-		return `<text x="${this.width / 2}" y="${this.height * this.areaRatio / 2}">${title}<text>` 
+		return `<text text-anchor="middle" dominant-baseline="baseline" font-size="25" x="${this.width / 2}" y="${this.height * this.areaRatio / 2}">${title}<text>` 
 	}
 
 	Label () {
@@ -138,18 +138,22 @@ class Basicplot {
 
 		for (let i = 0; i < numY; i++) {
 			// 画y轴标签
-			ylabels += `<text width="50px" height="auto" x="${this.pointLeftTop.x-30}" y="${this.pointLeftTop.y + i*offsetY}">${Math.floor((numY-i-1)*valueY)}</text>`
-			ylabels += `<line x1="${this.pointLeftTop.x}" y1="${this.pointLeftTop.y + i*offsetY}" x2="${this.pointLeftTop.x-5}" y2="${this.pointLeftTop.y + i*offsetY}" style="stroke:steelblue; stroke-width:1"></line>`
+			ylabels += `<text width="50px" height="auto" x="${this.pointLeftTop.x-10}" y="${this.pointLeftTop.y + i*offsetY}">${Math.floor((numY-i-1)*valueY)}</text>`
+			ylabels += `<line x1="${this.pointLeftTop.x-5}" y1="${this.pointLeftTop.y + i*offsetY}" x2="${this.pointLeftTop.x}" y2="${this.pointLeftTop.y + i*offsetY}" style="stroke:steelblue; stroke-width:1"></line>`
 		}
+		ylabels = `<g class='ylabels' text-anchor='end' dominant-baseline='central'>${ylabels}</g>`
+
 
 		let numX = this.config.label.length,
 			offsetX = this.width * (1- this.areaRatio) / numX,
-			xlabels = '',
-			pixelPerWord = Math.max.apply(Math, this.config.label.map(label => String(label).length))
+			xlabels = ''
+			// pixelPerWord = Math.max.apply(Math, this.config.label.map(label => String(label).length))
 
 		for (let i = 0; i < numX; i++) {
-			xlabels += `<text x="${this.pointLeftTop.x + (i+0.5) * offsetX - 5*pixelPerWord}" y="${this.pointRightBottom.y + 15}">${this.config.label[i]}</text>`
+			xlabels += `<text x="${this.pointLeftTop.x + (i+0.5) * offsetX}" y="${this.pointRightBottom.y}">${this.config.label[i]}</text>`
+			// xlabels += `<text x="${this.pointLeftTop.x + (i+0.5) * offsetX - 5*pixelPerWord}" y="${this.pointRightBottom.y + 15}">${this.config.label[i]}</text>`
 		}
+		xlabels = `<g class='xlabels' text-anchor='middle' dominant-baseline='hanging'>${xlabels}</g>`
 
 		return "<g class='labels'>" + xlabels + ylabels+ "</g>"
 	}
