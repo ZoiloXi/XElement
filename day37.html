@@ -28,7 +28,7 @@ const sales = {
 
 // 获取原始数据
 // 创建数据控制器，用于筛选数据和重组数据
-let rawData = JSON.parse(localStorage.getItem('mySales')),
+let rawData = JSON.parse(localStorage.getItem('mySales')) || sourceData,
 	mydata = new DataController(rawData)
 
 // 以下是初始化
