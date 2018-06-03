@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>百度IFE-day39-41</title>
+	<link rel="stylesheet" type="text/css" href="./css/day37.css">
+</head>
+<body>
+
+<div id="X-Checkbox" class='checkbox'></div>
+<div id="X-Checkbox2" class='checkbox'></div>
+
+<button class='store'>存储数据</button>
+<div id="X-Table"></div>
+
+<script type="text/javascript">
+const log = console.log.bind(console)
+
+</script>
+<script type="text/javascript" src="./js/utils.js"></script>
+<script type="text/javascript" src="./js/raw_data.js"></script>
+<script type="text/javascript" src="./js/checkbox.js"></script>
+<script type="text/javascript" src="./js/dataController.js"></script>
+<script type="text/javascript" src="./js/table.js"></script>
+<script type="text/javascript" src="./js/table_editable.js"></script>
+
+<script type="text/javascript">
+const sales = {
+	product: ['手机', '笔记本', '智能音箱'],
+	region: ['华东', '华北', '华南'],
+}
+
+// 创建2个复选框，地区和产品
+let myProduct = new Checkbox({
+	container: document.querySelector('#X-Checkbox2'),
+	type: 'checkbox',
+	name: '产品：',
+	allCheck: true,
+	//reverseCheck: false,
+	data: sales.product,
+}),
+	myRegion = new Checkbox({
+	container: document.querySelector('#X-Checkbox'),
+	type: 'checkbox',
+	name: '地区：',
+	allCheck: true,
+	reverseCheck: false,
+	data: sales.region,
+})
+
+// 获取原始数据
+// 创建数据控制器，用于筛选数据和重组数据
+let rawData = sourceData,
+	mydata = new DataController(rawData)
+
+// 以下是初始化
+let query = utils.getQuery() == 'all' ? sales : utils.getQuery(),
+	reshape = mydata.reshape(query.region, query.product),
+	months = []
+for (let i = 0; i < 12; i++) months.push(i+1+'月')
+
+let mytable = new EditTable({
+	data: reshape,
+	head: ['region', 'product'].concat(months),
+	caption: '各地区各产品销售情况',
+})
+
+// 响应复选框的改变，重绘数据表
+document.addEventListener('click', (e) => {
+	let target = e.target
+
+	if (target.tagName != 'INPUT') return
+
+	let region = myRegion.getResult(),
+		product = myProduct.getResult(),
+		data = mydata.reshape(region, product),
+		primary = region.length <= product.length ? 'region' : 'product',
+		secondary = region.length <= product.length ? 'product' : 'region'
+
+	mytable.set({
+		data: data,
+	})
+
+	let url = utils.setQuery({
+		region: region,
+		product: product
+	})
+	history.pushState({
+		region: region,
+		product: product
+	}, null, url)
+	// myLines.setConfig({
+	// 	title: [region, product],
+	// 	data: data
+	// })
+})
+
+// 存储数据
+let storeBtn =  document.querySelector('.store')
+storeBtn.addEventListener('click', (e) => {
+	let data = mytable.get()
+
+	if (!localStorage.getItem('sales')) localStorage.setItem('sales', sourceData)
+	localStorage.setItem('mySales', JSON.stringify(data))
+	log(`数据在localstorage中存储成功, ${JSON.stringify(data)}`)
+
+	let xhr = new XMLHttpRequest()
+	xhr.open('POST', './', true, )
+	xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded")
+	xhr.onreadystatechange = (res) => {
+		if (xhr.state == 4 && xhr.status == 200) {
+			log('数据发送至服务器成功！')
+		} else {
+			log('数据发送至服务器失败！！！')
+		}
+	}
+	xhr.send(JSON.stringify(data))
+})
+
+window.addEventListener('popstate', (e) => {
+	let query = utils.getQuery() =='all' ? sales : utils.getQuery(),
+		reshape = mydata.reshape(query.region, query.product)
+
+	mytable.set({
+		data: reshape,
+	})
+})
+</script>
+</body>
+</html>

@@ -78,5 +78,23 @@ const utils = {
 		colorArr.push(`rgb(${r}, ${g}, ${b})`)
 		
 		return colorArr
+	},
+
+	getQuery () {
+		if (!window.location.search) return 'all'
+		let querys = window.location.search
+							.slice(1).split('&')
+
+		querys = querys[0].split('=')[1]
+		// URLdecode
+		querys = decodeURI(querys)
+
+		return JSON.parse(querys)
+	},
+
+	setQuery (obj) {
+		let url = window.location.href.replace(/\?(\w|\W)*$/, '')
+		
+		return url + '?q=' + JSON.stringify(obj)
 	}
 }
