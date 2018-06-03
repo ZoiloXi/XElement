@@ -1,0 +1,10 @@
+.checkbox {
+	width: 300px;
+	height: 60px;
+	
+	margin: 5px;
+	padding: 5px;
+
+	border: 1px dotted steelblue;
+	border-radius: 5px;
+}

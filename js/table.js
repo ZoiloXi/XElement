@@ -36,7 +36,7 @@ class Table {
 			})
 		})
 
-		this.table.innerHTML = `<table border=1>
+		this.table.innerHTML = `<table>
 									<caption>${this.caption}</caption>
 									<thead>${headEle}</thead>
 									<tbody>${rowEle}</tbody>
@@ -47,5 +47,42 @@ class Table {
 		config.head && (this.head = config.head)
 		config.data && (this.data = config.data)
 		this.render()
+	}
+
+	get () {
+		// 重新生成数据
+		let primary = this.table.querySelectorAll('thead th')[0].innerText,
+			secondary = this.table.querySelectorAll('thead th')[1].innerText,
+			rowspans = this.table.querySelectorAll('.rowname[rowspan]'),
+			rownames = this.table.querySelectorAll('.rowname:not([rowspan])'),
+			trs = this.table.querySelectorAll('.rowdata'),
+			offset = trs.length / rownames.length
+
+		let data = []
+
+		rownames.forEach((item, index) => {
+			let temp = {}
+			temp[secondary] = item.innerText
+			temp['sale'] = Array.from(trs)
+								.slice(offset * index, offset * (index+1))
+								.map((tr) => {
+									return tr.innerText
+								})
+
+			data.push(temp)
+		})
+
+		let id = -1
+		rowspans.forEach((item) => {
+			let num = Number(item.getAttribute('rowspan')),
+				text = item.innerText
+
+			for (let i = 0; i < num; i++) {
+				id += 1
+				data[id][primary] = text
+			}
+		})
+
+		return data
 	}
 }

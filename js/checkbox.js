@@ -6,6 +6,7 @@ class Checkbox {
 		this.AddReverseCheck = config.reverseCheck
 		this.AddAllCheck = config.allCheck
 		this.data = config.data
+		this.defaultChecked = config.default || []
 
 		this.selected = []
 		this.items = []
@@ -21,7 +22,9 @@ class Checkbox {
 	render () {
 		let boxLabel = `<label for=${this.name}>${this.name}</label>`,
 			boxItems = this.data.map((item, index) => {
-				return `<input type=${this.type} name=${this.name} value=${item} />${item}`
+				return this.defaultChecked.indexOf(item) > -1 ?
+				 			`<input type=${this.type} name=${this.name} value=${item} checked=true/>${item}` :
+				 			`<input type=${this.type} name=${this.name} value=${item} />${item}`
 			}),
 			// 是否显示全选按钮和反选按钮
 			boxAllCheck = this.AddAllCheck ?
@@ -33,6 +36,9 @@ class Checkbox {
 
 		this.container.innerHTML = boxLabel + boxItems.join('') + '<br>	' + boxAllCheck + boxReverseCheck
 		this.items = this.container.querySelectorAll(`input[type=${this.type}]`)
+		this.selected = Array.from(this.items).filter((item) => {
+			return this.defaultChecked.indexOf(item.value) > -1
+		})
 	}
 
 	addEvent () {
@@ -86,7 +92,7 @@ class Checkbox {
 		this.toggleAllCheck()
 	}
 
-	getResult () {
+	get () {
 		return Array.prototype.map.call(this.selected, (sel) => {
 			return sel.value
 		})

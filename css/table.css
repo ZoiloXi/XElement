@@ -1,0 +1,66 @@
+
+#X-Table table {
+	clear: both;
+	border-collapse: collapse;
+}
+
+#X-Table th, #X-Table td {
+	border: 1px solid steelblue;
+}
+
+#X-Table table tr:not(first-of-type):hover {
+	background: lightsteelblue;
+}
+
+#X-Table td,  #X-Table th{
+	position: relative;
+
+	max-width: 90px;
+	min-width: 90px;
+	height: 30px;
+
+	text-align: center
+}
+
+#X-Table td:after {
+	position: absolute;
+	right: 0;
+	top: 0;
+
+	display: none;
+	
+	width: 15px;
+	height: 15px;
+
+	background: url(../images/pencil.png);
+	background-size: cover;
+
+	content: '';
+	text-align: right;
+}
+
+#X-Table .rowdata:not(.edit-td):hover:after {
+	display: block;
+}
+
+
+#X-Table .edit-td:hover:after {
+	display: none;
+}
+#X-Table .panel {
+	overflow: hidden;
+}
+
+#X-Table td .edit-input, .edit-cancel, .edit-identify {
+	float: left;
+}
+#X-Table td .edit-input {
+	width: 60px;
+	height: 28px;
+	border: none;
+}
+#X-Table td .edit-cancel, .edit-identify {
+	width: 28px;
+	height: 14px;
+	transform: scale(0.8);
+}
