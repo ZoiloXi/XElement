@@ -53,11 +53,12 @@ let rawData = sourceData,
 	mydata = new DataController(rawData)
 
 // 以下是初始化
-let query = utils.getQuery() == 'all' ? sales : utils.getQuery(),
+let query = utils.getHash() == 'all' ? sales : utils.getHash(),
 	reshape = mydata.reshape(query.region, query.product),
 	months = []
 for (let i = 0; i < 12; i++) months.push(i+1+'月')
 
+log(reshape)
 let mytable = new EditTable({
 	data: reshape,
 	head: ['region', 'product'].concat(months),
@@ -80,7 +81,7 @@ document.addEventListener('click', (e) => {
 		data: data,
 	})
 
-	let url = utils.setQuery({
+	let url = utils.setHash({
 		region: region,
 		product: product
 	})
@@ -117,9 +118,9 @@ storeBtn.addEventListener('click', (e) => {
 })
 
 window.addEventListener('popstate', (e) => {
-	let query = utils.getQuery() =='all' ? sales : utils.getQuery(),
+	let query = utils.getHash() =='all' ? sales : utils.getHash(),
 		reshape = mydata.reshape(query.region, query.product)
-
+	log(query,reshape)
 	mytable.set({
 		data: reshape,
 	})
