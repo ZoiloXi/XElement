@@ -81,6 +81,10 @@ const utils = {
 	},
 
 	getQuery () {
+		if (window.location.href.indexOf('htmlpreview') > -1) {
+			return utils.getHash()
+		}
+
 		if (!window.location.search) return 'all'
 		let querys = window.location.search
 							.slice(1).split('&')
@@ -93,8 +97,23 @@ const utils = {
 	},
 
 	setQuery (obj) {
+		if (window.location.href.indexOf('htmlpreview') > -1) {
+			return utils.setHash(obj)
+		}
+
 		let url = window.location.href.replace(/\?(\w|\W)*$/, '')
 		
 		return url + '?q=' + JSON.stringify(obj)
+	},
+	
+	getHash () {
+		if (!window.location.hash) return 'all'
+		return JSON.parse(decodeURI(window.location.hash.slice(1)))
+	},
+
+	setHash (obj) {
+		let url = window.location.href.replace(/#(\w|\W)*$/, '')
+		return url + '#' + JSON.stringify(obj)
 	}
+
 }
