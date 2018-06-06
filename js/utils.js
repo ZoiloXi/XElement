@@ -114,6 +114,62 @@ const utils = {
 	setHash (obj) {
 		let url = window.location.href.replace(/#(\w|\W)*$/, '')
 		return url + '#' + JSON.stringify(obj)
-	}
+	},
 
+	svg (name, prop) {
+		let ele = document.createElementNS('http://www.w3.org/2000/svg', name)
+
+		for (let key in prop) {
+			ele.setAttribute(key, prop[key])
+		}
+		return ele
+	},
+
+	dom (staff, text, clazz) {
+		let content = clazz == 'rest' ?
+				`<p>${text} <span class="head">${staff.name}(${staff.toString()})</span></p>` :
+				`<p><span class="head">${staff.name}(客户)</span> ${text}</p>`
+		return `<div class='${clazz}'>${content}</div>`
+	},
+},
+Event = {
+	events: {},
+	sub (type, cb) {
+		if (type in Event.events) {
+			Event.events[type].push(cb)
+		} else {
+			Event.events[type] = [cb]
+		}
+	},
+	pub (evt, data, type) {
+		// 如果type是every,表明注册在事件类型下的所有回调回调都执行
+		// 如果type是once,表明只执行最开始的那个回调函数; 就厨师做菜来说,并不是所有厨师都来做一道菜
+		if (!(evt in Event.events)) return
+
+		let callbacks = Event.events[evt]
+
+		if (type == 'every') {
+			delete Event.events[evt]
+			callbacks.forEach((cb) => {
+				cb[evt](data)
+			})
+		}
+		if (type == 'once') {
+			let cb = callbacks[0]
+			cb(data)
+		}
+	}
+},
+log = console.log.bind(console),
+contentBox = {
+	box: document.querySelector('#ContentBox'),
+	add: function (strordom) {
+		if (typeof strordom == 'string') {
+			var frag = document.createElement('div')
+			frag.innerHTML = strordom
+			contentBox.box.appendChild(frag)
+		} else {
+			contentBox.box.appendChild(strordom)
+		}
+	}
 }

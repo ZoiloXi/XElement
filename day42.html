@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>day42-开餐厅(OOJ)</title>
+	<style type="text/css">
+		#ContentBox {
+			width: 800px;
+			height: auto;
+			border: 1px solid steelblue;
+		}
+		.customer {
+			text-align: left;
+		}
+		.rest {
+			text-align: right;
+		}
+		.head {
+			display: inline-block;
+			height: 30px;
+			padding: 5px;
+			border-radius: 5px;
+			background: steelblue;
+			color: white;
+			text-align: middle;
+			line-height: 30px;
+		}
+		.prompt, .title {
+			text-align: center;
+		}
+		.stress {
+			color: red;
+			background-color: lightblue;
+		}
+	</style>
+</head>
+<body>
+<div id="ContentBox">
+	<p class="title">深夜食堂</p>
+</div>
+
+<script type="text/javascript" src="./js/utils.js"></script>
+<script type="text/javascript" src="./js/day42/ES5_restaurant.js"></script>
+<script type="text/javascript" src="./js/day42/ES5_staff.js"></script>
+<script type="text/javascript" src="./js/day42/ES5_chef.js"></script>
+<script type="text/javascript" src="./js/day42/ES5_waiter.js"></script>
+<script type="text/javascript" src="./js/day42/ES5_customerAndCuisines.js"></script>
+
+<script type="text/javascript">
+// contentBox 在utils.js中定义
+
+var myRest = new Restaurant({
+		name: "Midnight Canteen",
+		money: 120000,
+		seats: 12 
+	}),
+	// 职工
+	John_chef = new Chef({
+		name: 'John',
+		salary: 5000,
+		type: 'Chef',
+	}),
+	Moss_chef = new Chef({
+		name: 'Moss',
+		salary: 4800,
+		type: 'Chef',
+	}),
+	Joy_waiter = new Waiter({
+		name: 'Joy',
+		salary: 3500,
+		type: 'Waiter',
+	}),
+	Lisa_waiter = new Waiter({
+		name: 'Lisa',
+		salary: 3500,
+		type: 'Waiter',
+	}),
+	// 菜品
+	meat = new Cuisine({
+		price: 45,
+		cost: 25,
+		name: 'meat'
+	}),
+	fish = new Cuisine({
+		price: 35,
+		cost: 18,
+		name: 'fish'
+	}),
+	vegatable = new Cuisine({
+		price: 12,
+		cost: 4,
+		name: 'vegatable'
+	})
+
+myRest.hire([John_chef, Moss_chef, Joy_waiter, Lisa_waiter])
+	  .menu([meat, fish, vegatable])
+	  .opening()
+
+
+var customerNum = 3,
+	myText = [
+		'服务员你好，我要点菜！',
+		'有人吗？快来点菜啊。。。',
+		'威特，威特, where are you啊?'
+	],
+	names = [
+		'众里寻他',
+		'千百度',
+		'Baidu'
+	]
+
+var timeGap = 3000
+
+
+var timer1 = setTimeout(function () {
+	var customer1 = new Customer({
+		name: names[customerNum-1]
+	}),
+		greet = myText[customerNum-1]
+
+	customer1.hello(contentBox, myText[customerNum-1])
+	customerNum--
+}, timeGap * 1)
+
+var timer1 = setTimeout(function () {
+	var customer2 = new Customer({
+		name: names[customerNum-1]
+	}),
+		greet = myText[customerNum-1]
+
+	customer2.hello(contentBox, myText[customerNum-1])
+	customerNum--
+}, timeGap * 2)
+
+var timer1 = setTimeout(function () {
+	var customer3 = new Customer({
+		name: names[customerNum-1]
+	}),
+		greet = myText[customerNum-1]
+
+	customer3.hello(contentBox, myText[customerNum-1])
+	customerNum--
+}, timeGap * 3)
+
+</script>
+</body>
+</html>
