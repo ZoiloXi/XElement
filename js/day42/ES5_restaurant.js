@@ -19,10 +19,14 @@ Restaurant.prototype.hire = function (staffs) {
 	staffs.forEach((staff) => {
 		if (staff.constructor == Chef) {
 			this.chefs.push(staff)
+			staff.setID(this.chefs.length-1)
 		} else if (staff.constructor == Waiter) {
 			this.waiters.push(staff)
+			staff.setID(this.waiters.length-1)
 		}
-		staff.setID(this.staffs.length-1)
+
+		staff.new()
+
 		this.money -= staff.salary
 	})
 	return this
@@ -34,6 +38,7 @@ Restaurant.prototype.menu = function (menu) {
 
 	return this
 }
+// 开除职员
 Restaurant.prototype.fire = function (staff) {
 	this.staffs.splice(this.staffs.indexOf(staff),1)
 
@@ -44,7 +49,7 @@ Restaurant.prototype.opening = function () {
 	var self = this
 	// 各个职工开始工作,设置工作状态为空闲，为响应业务做准备；busy表明正在执行业务
 	self.staffs.forEach((staff) => {
-		staff.start()
+		staff.free()
 	})
 
 	// 开始监听各种事件
@@ -86,11 +91,12 @@ Restaurant.prototype.hello = function (data) {
 	}
 
 	this.available -= 1
+
 	Event.pub('serve', data, 'once')
 
 	return this
 }
-
+// 事件调度函数,根据不同事件类型判断给服务员还是厨师
 Restaurant.prototype.dispath = function (data) {
 	var customer = data.customer,
 		staff = null,
@@ -113,17 +119,23 @@ Restaurant.prototype.dispath = function (data) {
 	}
 
 	if (staff) {
-		staff.status = 'busy'
+		staff.busy()
 		staff[data.type](data)
 	} else {
-		alert(text + '人数不够，需要进行招募啊。')
+		log(text + '人数不够，需要进行招募啊。', data)
+		// utils.modal(text + '人数不够，需要进行招募啊。')
 		this.waiting.push(customer)
 	}
 }
 
 // 完成一次交易
 Restaurant.prototype.transaction = function (data) {
-	this.money += cuisine.price - cuisine.cost
+	var cuisines = data.selected
+	cuisines.forEach((cuisine) => {
+		this.money += cuisine.price - cuisine.cost
+	})
+
+	Event.pub('addCanteen', utils.dom(this, 'yahoo，赚钱了啊', 'restaurant'), 'once')
 
 	// 完成一次交易，表明空余一张桌子
 	if (this.waiting.length > 0) {
@@ -131,8 +143,9 @@ Restaurant.prototype.transaction = function (data) {
 			restaurant: this,
 			customer: this.waiting.shift()
 		})
+	} else {
+		this.available += 1
 	}
-	this.available += 1
 
 	return this
 }

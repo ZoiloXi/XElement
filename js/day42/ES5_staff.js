@@ -5,8 +5,6 @@ function Staff(option) {
 	this.salary = option.salary
 	this.status = 'free'	// 'busy'
 	this.type = option.type
-
-	this.new()
 }
 
 Staff.prototype.setID = function (id) {
@@ -18,12 +16,14 @@ Staff.prototype.toString = function () {
 Staff.prototype.work = function () {
 	console.log('I have done my jobs')
 }
-Staff.prototype.start = function () {
+Staff.prototype.free = function () {
 	this.status = 'free'
 }
 Staff.prototype.busy = function () {
 	this.status = 'busy'
 }
 Staff.prototype.new = function () {
-	contentBox.add('This is our ' + this.type + ', ' + this.name + ', welcome~~~~~')
+	var text = 'This is our ' + this.type + ', ' + this.name + ', welcome~~~~~';
+	Event.pub('addCanteen', text, 'once')
+	// contentBox.add()
 }

@@ -80,6 +80,18 @@ const utils = {
 		return colorArr
 	},
 
+	randomName () {
+		var name = [],
+			len = 5;
+
+		for (var i = 0; i < len; i++) {
+			name.push(Math.random() * (123-97) + 97)
+		}
+		name = String.fromCharCode.apply(String, name)
+		name[0] = name[0].toUpperCase()
+		return name
+	},
+
 	getQuery () {
 		if (window.location.href.indexOf('htmlpreview') > -1) {
 			return utils.getHash()
@@ -126,10 +138,27 @@ const utils = {
 	},
 
 	dom (staff, text, clazz) {
+		let type = staff.type || '客户'
 		let content = clazz == 'rest' ?
 				`<p>${text} <span class="head">${staff.name}(${staff.toString()})</span></p>` :
-				`<p><span class="head">${staff.name}(客户)</span> ${text}</p>`
+				`<p><span class="head">${staff.name}(${type})</span> ${text}</p>`
 		return `<div class='${clazz}'>${content}</div>`
+	},
+	modal (text) {
+		var prompt = document.createElement('div'),
+			title = document.createElement('div');
+
+		title.innerText = text
+		title.classList.add('title')
+
+		prompt.classList.add('modal-prompt')
+		prompt.appendChild(title)
+
+		document.body.appendChild(prompt)
+
+		setTimeout(function () {
+			document.body.removeChild(prompt)
+		}, 1500);
 	},
 },
 Event = {
@@ -151,7 +180,7 @@ Event = {
 		if (type == 'every') {
 			delete Event.events[evt]
 			callbacks.forEach((cb) => {
-				cb[evt](data)
+				cb(data)
 			})
 		}
 		if (type == 'once') {
@@ -160,16 +189,4 @@ Event = {
 		}
 	}
 },
-log = console.log.bind(console),
-contentBox = {
-	box: document.querySelector('#ContentBox'),
-	add: function (strordom) {
-		if (typeof strordom == 'string') {
-			var frag = document.createElement('div')
-			frag.innerHTML = strordom
-			contentBox.box.appendChild(frag)
-		} else {
-			contentBox.box.appendChild(strordom)
-		}
-	}
-}
+log = console.log.bind(console)

@@ -2,6 +2,8 @@
 function Customer(option) {
 	this.name = option.name
 	this.ordered = []
+
+	Event.sub('eat', this.eat.bind(this))
 }
 Customer.prototype.order = function (data) {
 	data.staff && (data.staff.status = 'free')
@@ -11,23 +13,37 @@ Customer.prototype.order = function (data) {
 			return cuisine.name
 		}),
 		text = '我要' + chosed.slice(0, data.selected.length)+ '(' + cuisines.join(' ') + ')'
-	contentBox.add(utils.dom(this, text, 'customer'))
+	// contentBox.add(utils.dom(this, text, 'customer'))
+	Event.pub('addContent', utils.dom(this, text, 'customer'), 'once')
 
 	Event.pub('order', data, 'once')
 	this.ordered = data.selected
 }
-Customer.prototype.eat = function () {
-	console.log('The ' + this.ordered[0].name + ' are delicious, I like it.')
-	Event.pub('pay', this.ordered[0], 'once')
+Customer.prototype.eat = function (data) {
+	var text = 'The ' + this.ordered.map(order => order.name).join(' ') + ' are delicious, I like it.';
+
+	Event.pub('addContent', utils.dom(this, text, 'customer'), 'once');
+
+	data.type = 'pay'
+	data.customer = this
+	data.staff = null
+
+	text = this.name == 'Baidu' ? '结账结账！' : '快来结账啊。给少点波，我穷。'
+	Event.pub('addContent', utils.dom(this, text, 'customer'), 'once')
+	Event.pub('pay', data, 'once')
+
 	this.ordered = []
 }
-Customer.prototype.hello = function (contentBox, text) {
+Customer.prototype.hello = function (text) {
 	var data = {
 		customer: this
 	}
+	// contentBox.add(utils.dom(this, text, 'customer'))
+	Event.pub('addContent', utils.dom(this, text, 'customer'), 'once')
 
-	contentBox.add(utils.dom(this, text, 'customer'))
-	Event.pub('hello', data, 'once')
+	setTimeout(function() {
+		Event.pub('hello', data, 'once')
+	}, 1000);
 }
 
 

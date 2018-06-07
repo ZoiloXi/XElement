@@ -3,17 +3,36 @@
 <head>
 	<title>day42-开餐厅(OOJ)</title>
 	<style type="text/css">
-		#ContentBox {
-			width: 800px;
-			height: auto;
+		#contentBox {
+			position: absolute;
+			left: 40px;
+			top: 0;
+
+			width: 600px;
+			height: 600px;
+			overflow-y: auto;
+			box-sizing: border-box;
 			border: 1px solid steelblue;
 		}
+		/*食堂名字*/
+		.cuisines {
+			text-align: center;
+		}
+		/*客户言语位置*/
 		.customer {
 			text-align: left;
 		}
+		/*食堂员工言语位置*/
 		.rest {
 			text-align: right;
 		}
+		/*在言语中进行强调显示客户名字*/
+		.stress {
+			color: red;
+			background-color: lightblue;
+		}
+
+		/*名字突出显示，表明是谁的话语*/
 		.head {
 			display: inline-block;
 			height: 30px;
@@ -24,123 +43,111 @@
 			text-align: middle;
 			line-height: 30px;
 		}
-		.prompt, .title {
+
+		/*食堂内部交流*/
+		#canteen {
+			position: fixed;
+			left: 642px;
+			top: 0;
+			width: 600px;
+			height: 600px;
+			box-sizing: border-box;
+			padding: 0 40px;
+		}
+
+		#canteen .title {
 			text-align: center;
 		}
-		.stress {
+		#canteen .title img {
+			width: 143px;
+			height: 80px;	
+		}
+		/*用这个是因为checkbox的组件wrapper用的是div*/
+		#canteen .checkbox {
+			display: inline-block;
+		}
+		button.hire, button.welcome, table.status {
+			margin-top: 20px;
+			border: 1px solid steelblue;
+		}
+		/*设置表格，显示营业状态的*/
+		table.status {
+			border-collapse: collapse;
+		}
+		table.status th {
+			padding: 5px;
+		}
+		table.status th[colspan] {
 			color: red;
-			background-color: lightblue;
+		}
+
+		#canteenBox {
+			width: 100%;
+			height: 50%;
+			border-radius: 5px;
+			border: 1px solid steelblue;
+			margin-top: 20px;
+			overflow-y: auto;
+		}
+
+		/*初始的modal层,用于食堂开业*/
+		#modal, .modal-prompt {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: white;
+			text-align: center;
+			z-index: 1000;
+		}
+		#modal .title {
+			margin-top: 200px;
+		}
+		.modal-prompt .title {
+			margin-top: 200px;
+			font-size: 40px;
+			color: red;
+			text-align: center;
 		}
 	</style>
 </head>
 <body>
-<div id="ContentBox">
-	<p class="title">深夜食堂</p>
+<p id="prompt" style="color:red; position: absolute; top: 0; left: 42px; opacity: 0.3; font-size: 30px;">接受新顾客才能开始的。</p>
+<div id="contentBox">
+	
+</div>
+<div id="canteen">
+	<div class="title"><img src="./images/midnight_canteen.png"></div>
+	<button class="welcome">接收新顾客</button><br>
+	<button class="hire">招聘新员工</button>
+	<div id="X-Checkbox" class='checkbox'></div>
+	<table class="status" border="1">
+		<thead><th>项目</th><th>状态</th></thead>
+		<tbody>
+			<tr class="money"><th>cashflow</th><th>10000</th><th colspan="2">本表格含营业额、员工等统计待完成。。。</th></tr>
+			<tr class="seats"><th>剩余座位</th><th>15</th></tr>
+			<!-- <tr class="chefs"><th class='name'></th><th></th></tr> -->
+
+		</tbody>
+	</table>
+
+	<div id="canteenBox"></div>
+</div>
+
+<div id="modal">
+	<div class='title'><img src="./images/midnight_canteen.png"></div>
+	<button class="begin">Are you ready? GO !!!</button>
 </div>
 
 <script type="text/javascript" src="./js/utils.js"></script>
+<script type="text/javascript" src="./js/checkbox.js"></script>
+<script type="text/javascript" src="./js/table.js"></script>
 <script type="text/javascript" src="./js/day42/ES5_restaurant.js"></script>
 <script type="text/javascript" src="./js/day42/ES5_staff.js"></script>
 <script type="text/javascript" src="./js/day42/ES5_chef.js"></script>
 <script type="text/javascript" src="./js/day42/ES5_waiter.js"></script>
 <script type="text/javascript" src="./js/day42/ES5_customerAndCuisines.js"></script>
-
-<script type="text/javascript">
-// contentBox 在utils.js中定义
-
-var myRest = new Restaurant({
-		name: "Midnight Canteen",
-		money: 120000,
-		seats: 12 
-	}),
-	// 职工
-	John_chef = new Chef({
-		name: 'John',
-		salary: 5000,
-		type: 'Chef',
-	}),
-	Moss_chef = new Chef({
-		name: 'Moss',
-		salary: 4800,
-		type: 'Chef',
-	}),
-	Joy_waiter = new Waiter({
-		name: 'Joy',
-		salary: 3500,
-		type: 'Waiter',
-	}),
-	Lisa_waiter = new Waiter({
-		name: 'Lisa',
-		salary: 3500,
-		type: 'Waiter',
-	}),
-	// 菜品
-	meat = new Cuisine({
-		price: 45,
-		cost: 25,
-		name: 'meat'
-	}),
-	fish = new Cuisine({
-		price: 35,
-		cost: 18,
-		name: 'fish'
-	}),
-	vegatable = new Cuisine({
-		price: 12,
-		cost: 4,
-		name: 'vegatable'
-	})
-
-myRest.hire([John_chef, Moss_chef, Joy_waiter, Lisa_waiter])
-	  .menu([meat, fish, vegatable])
-	  .opening()
-
-
-var customerNum = 3,
-	myText = [
-		'服务员你好，我要点菜！',
-		'有人吗？快来点菜啊。。。',
-		'威特，威特, where are you啊?'
-	],
-	names = [
-		'众里寻他',
-		'千百度',
-		'Baidu'
-	]
-
-var timeGap = 3000
-
-
-var timer1 = setTimeout(function () {
-	var customer1 = new Customer({
-		name: names[customerNum-1]
-	}),
-		greet = myText[customerNum-1]
-
-	customer1.hello(contentBox, myText[customerNum-1])
-	customerNum--
-}, timeGap * 1)
-
-var timer1 = setTimeout(function () {
-	var customer2 = new Customer({
-		name: names[customerNum-1]
-	}),
-		greet = myText[customerNum-1]
-
-	customer2.hello(contentBox, myText[customerNum-1])
-	customerNum--
-}, timeGap * 2)
-
-var timer1 = setTimeout(function () {
-	var customer3 = new Customer({
-		name: names[customerNum-1]
-	}),
-		greet = myText[customerNum-1]
-
-	customer3.hello(contentBox, myText[customerNum-1])
-	customerNum--
-}, timeGap * 3)
-
-</script>
+<script type="text/javascript" src='./js/day42/index.js'></script>
 </body>
 </html>
