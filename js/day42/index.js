@@ -41,10 +41,21 @@ var canteen = document.getElementById('canteen'),
 	canteenBox = {
 		box: canteen.querySelector('#canteenBox'),
 		add: contentBox.add,
-		remove: contentBox.remove
+		remove: contentBox.remove,
+		refresh: function(table) {
+			var thead = table.thead.map(th => {
+				return `<th>${th}</th>`
+			}).join('');
+			var status = table.status.map(sta => {
+				return `<td>${sta}</td>`
+			}).join('');
+			var statistic = canteen.querySelector('table.status');
+			statistic.innerHTML = `<thead>${thead}</thead><tbody><tr>${status}</tr></tbody>`
+		}
 	};
 Event.sub('addCanteen', canteenBox.add.bind(canteenBox))
-Event.sub('rmCanteen', canteenBox.add.bind(canteenBox))
+Event.sub('rmCanteen', canteenBox.remove.bind(canteenBox))
+Event.sub('refresh', canteenBox.refresh.bind(canteenBox))
 // 点击雇佣新职工
 hireBtn.onclick = function (e) {
 	var beingHire = hireType.get()
@@ -77,7 +88,10 @@ var customerNum = 3,
 		'Baidu'
 	];
 welcomeBtn.onclick = function () {
-	if (customerNum == 0) customerNum = 3
+	// if (customerNum == 0) customerNum = 3
+	var beginPrompt = document.querySelector('#prompt');
+	beginPrompt.style.display = 'none'
+	
 	var customer = new Customer({
 		name: names[customerNum-1] || utils.randomName()
 	}),

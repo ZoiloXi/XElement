@@ -2,6 +2,7 @@
 function Restaurant(option) {
 	this.name = option.name
 	this.money = option.money
+	this.type = "boss"
 	this.seats = option.seats
 	this.staffs = []
 	this.waiters = []
@@ -29,6 +30,11 @@ Restaurant.prototype.hire = function (staffs) {
 
 		this.money -= staff.salary
 	})
+
+	this.statistic()
+
+	if (this.waiting.length > 0) Event.pub('wait', null, 'once')
+
 	return this
 }
 // 开发菜系
@@ -51,6 +57,7 @@ Restaurant.prototype.opening = function () {
 	self.staffs.forEach((staff) => {
 		staff.free()
 	})
+	self.statistic()
 
 	// 开始监听各种事件
 	var evtTypes = ['hello',
@@ -61,7 +68,8 @@ Restaurant.prototype.opening = function () {
 					'eatcomplete',
 					'pay',
 					'transaction',
-					'wait']
+					'wait',
+					'statistic'];
 
 	for (var i = 0, len = evtTypes.length; i < len; i++) {
 		var type = evtTypes[i]
@@ -80,8 +88,7 @@ Restaurant.prototype.opening = function () {
 Restaurant.prototype.hello = function (data) {
 	if (this.available == 0) {
 		this.waiting.push(data.customer)
-		Event.pub('wait')
-		return
+		return this
 	}
 
 	data = {
@@ -121,11 +128,14 @@ Restaurant.prototype.dispath = function (data) {
 	if (staff) {
 		staff.busy()
 		staff[data.type](data)
+		// 完成一个事件，检查是否有等待顾客要处理
+		this.waiting.length > 0 && (Event.pub('wait', data, 'once'))
 	} else {
-		log(text + '人数不够，需要进行招募啊。', data)
-		// utils.modal(text + '人数不够，需要进行招募啊。')
+		utils.modal(text + '人数不够，需要进行招募啊。')
 		this.waiting.push(customer)
 	}
+	
+	Event.pub('statistic', data, 'once')
 }
 
 // 完成一次交易
@@ -138,19 +148,43 @@ Restaurant.prototype.transaction = function (data) {
 	Event.pub('addCanteen', utils.dom(this, 'yahoo，赚钱了啊', 'restaurant'), 'once')
 
 	// 完成一次交易，表明空余一张桌子
-	if (this.waiting.length > 0) {
-		Event.pub('serve', {
-			restaurant: this,
-			customer: this.waiting.shift()
-		})
-	} else {
-		this.available += 1
-	}
+	this.available += 1
+
+	Event.pub('statistic', data, 'once')
 
 	return this
 }
 
-Restaurant.prototype.wait = function (data) {
-	log('waiting 响应')
+// 更新统计
+Restaurant.prototype.statistic = function (data) {
+	var thead = [];
+	var status = [];
+
+	thead = thead.concat(['项目', '现金', '空位']);
+	status = status.concat(['状态', this.money.toFixed(2), this.available])
+
+	this.staffs.forEach((staff) => {
+		thead.push(staff.name + '<br>(' + staff.type + ')')
+		status.push(staff.status)
+	})
+	Event.pub('refresh', {
+		thead,
+		status
+	}, 'once')
+}
+
+Restaurant.prototype.wait = function () {
+	var hasFreeWaiter = this.waiters.some(waiter => {
+		return waiter.status == 'free'
+	});
+
+	if (this.waiting.length > 0 && hasFreeWaiter) {
+		var data = {}
+		data.customer = this.waiting.shift()
+		data.restaurant = this
+		data.type = 'serve'
+
+		Event.pub('serve', data, 'once')
+	}
 	return this
 }

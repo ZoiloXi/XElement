@@ -72,13 +72,11 @@
 		}
 		/*设置表格，显示营业状态的*/
 		table.status {
+			text-align: center;
 			border-collapse: collapse;
 		}
-		table.status th {
+		table.status th, table.status td {
 			padding: 5px;
-		}
-		table.status th[colspan] {
-			color: red;
 		}
 
 		#canteenBox {
@@ -123,13 +121,6 @@
 	<button class="hire">招聘新员工</button>
 	<div id="X-Checkbox" class='checkbox'></div>
 	<table class="status" border="1">
-		<thead><th>项目</th><th>状态</th></thead>
-		<tbody>
-			<tr class="money"><th>cashflow</th><th>10000</th><th colspan="2">本表格含营业额、员工等统计待完成。。。</th></tr>
-			<tr class="seats"><th>剩余座位</th><th>15</th></tr>
-			<!-- <tr class="chefs"><th class='name'></th><th></th></tr> -->
-
-		</tbody>
 	</table>
 
 	<div id="canteenBox"></div>
