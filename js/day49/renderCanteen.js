@@ -152,7 +152,7 @@ class RenderCanteen {
 
 			htmlStr = cuisines.map(c => {
 				return `<li>
-							<img class="d-cuisine-item" src="./images/${c}.svg"/>
+							<img class="d-cuisine-item" src="./images/${c}.png"/>
 							<span class="js-${c}-progress">烹饪中...</span>
 						</li>`
 			}).join('')
@@ -248,7 +248,7 @@ class RenderCanteen {
 		
 		document.body.appendChild(svg)
 
-		g = `<g id='svg_image_${name}'><image width='40' height='40' preserveAspectRatio='none meet' xlink:href="./images/${type}.svg"></g>`
+		g = `<g id='svg_image_${name}'><image width='40' height='40' preserveAspectRatio='none meet' xlink:href="./images/${type}.png"></g>`
 		
 		text.innerHTML = name
 		

@@ -8,7 +8,7 @@ class RenderKitchen {
 		// main template, for every staff
 		let mainTemplate = `<div class="k-staff css_fl css_bd" id="{{name}}">
 						<table class="js-info k-info" border="1">
-							<thead><th colspan="2"><img src="./images/{{type}}.svg"/>{{name}}</th></thead>
+							<thead><th colspan="2"><img src="./images/{{type}}.png"/>{{name}}</th></thead>
 							<tbody>
 								<tr><td>salary</td><td class="js-salary">{{salary}}</td></tr>
 								<tr><td>status</td><td class="js-status">{{status}}</td></tr>

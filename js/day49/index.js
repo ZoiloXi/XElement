@@ -44,6 +44,20 @@ var Waiter_Lucy = RestaurantFactory.instance({
 		name: 'vegetable',
 		type: 'cuisine',
 	}),
+	noodle = RestaurantFactory.instance({
+		cost: 12,
+		price: 24,
+		time: 10,
+		name: 'noodle',
+		type: 'cuisine',
+	}),
+	chicken = RestaurantFactory.instance({
+		cost: 5,
+		price: 14,
+		time: 6,
+		name: 'chicken',
+		type: 'cuisine',
+	}),
 	midnight = RestaurantFactory.instance({
 		name: 'midnight_canteen',
 		seats: 4,
@@ -52,7 +66,7 @@ var Waiter_Lucy = RestaurantFactory.instance({
 	})
 // 餐厅雇佣员工，开发菜系
 midnight.hire([Waiter_Lack, Waiter_Lucy, Chef_John])
-		.recipe([fish, vegetable])
+		.recipe([fish, vegetable, chicken, noodle])
 
 // 生成渲染函数,渲染页面; 渲染餐厅和厨房
 var render = {
