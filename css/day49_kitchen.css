@@ -1,0 +1,39 @@
+/*k means kitchen*/
+.Right .k-dialog, .Right .k-staff {
+	height: 300px;
+}
+
+.k-dialog {
+	width: 255px;
+	margin-left: 40px;
+	overflow: auto;
+}
+
+.k-staff {
+	width: 295px;
+}
+
+.k-staff .k-info {
+	border-collapse: collapse;
+}
+
+.k-staff .k-info th, .k-staff .k-info td {
+	width: 120px;
+	line-height: 40px;	
+	border: 1px solid steelblue;
+	text-align: center;
+}
+.k-staff .k-info img {
+	width: 30px;
+	height: 30px;
+	vertical-align: middle;
+}
+.k-info .k-cooking-progress, .d-dishup .d-dishup-progress {
+	display: inline-block;
+	width: 60px;
+	height: 30px;
+	margin: 5px auto;
+	border: 1px solid blue;
+	border-radius:  5px;
+	line-height: 30px;
+}

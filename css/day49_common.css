@@ -1,0 +1,49 @@
+/*通用*/
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+.css_fl {
+	float: left;
+}
+.css_fr {
+	float: right;
+}
+.css_clear:after {
+	content: '';
+	clear: both;
+}
+.css_clear:before {
+	content: '';
+	clear: both;
+}
+.css_bd {
+	border: 1px dotted lightsteelblue;
+}
+.css_hide {
+	display: none;
+}
+.css_show {
+	display: block;
+}
+
+svg {
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 999;
+	pointer-events: none;
+}
+
+/*两个顶级容器*/
+.Left, .Right {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 600px;
+	height: 600px;
+}
+.Right {
+	left: 600px;
+}

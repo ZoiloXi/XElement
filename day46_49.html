@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Baidu IFE day46-49</title>
+	<link rel="stylesheet" type="text/css" href="./css/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/day49_common.css">
+	<link rel="stylesheet" type="text/css" href="./css/day49_canteen.css">
+	<link rel="stylesheet" type="text/css" href="./css/day49_kitchen.css">
+</head>
+<body>
+<div class="Left css_bd">
+	<div class="desk css_fl css_bd css_hide">
+		<div class='d-header css_clear'>
+			<span class="css_fl" >
+				<i class="fa fa-user" aria-hidden="true"></i><span class="js-name">{{customer}}</span>
+			</span>
+			<span class="css_fr">
+				<i class="fa fa-clock-o" aria-hidden="true"></i><span class="js-time">{{time}}</span>
+			</span>
+		</div>
+		<div class="d-main css_bd">
+			<div class="d-order css_fl js-d-order">
+				<div class="d-ordered css_bd js-d-ordered css_hide">
+					<button class="d-ordered-btn js-order-btn css_fr">点菜</button>
+				</div>
+				<ul class="d-cuisine css_bd css_clear js-d-cuisine css_hide">
+					<li>
+						<img class="d-cuisine-item" alt='vegetable' src="./images/vegetable.svg"></img><span>￥{{vegetable}}元/份</span>
+					</li>
+					<li>
+						<img class="d-cuisine-item" alt='fish' src="./images/fish.svg"></img>￥{{fish}}元/份
+					</li>
+					<li>
+						<img class="d-cuisine-item" alt='chicken' src="./images/chicken.svg"></img><span>￥{{chicken}}元/份</span>
+					</li>
+					<li>
+						<img class="d-cuisine-item" alt='noodle' src="./images/noodle.svg"></img><span>￥{{noodle}}元/份</span>
+					</li>
+				</ul>
+			</div>
+			<div class='d-dishup css_fl js-d-dishup css_hide'>
+			</div>
+			<div class="d-dialog css_bd css_fl js-d-dialog">
+			</div>
+		</div>
+	</div>
+</div>
+<div class="Right css_bd">
+	<div class="k-dialog css_fl css_bd"></div>
+	<!-- <div class="k-staff css_fl css_bd"></div>
+	<div class="k-staff css_fl css_bd"></div>
+	<div class="k-staff css_fl css_bd"></div> -->
+	<!-- <div class="k-staff">这个根据有多少职员来生成</div> -->
+</div>
+
+
+<script type="text/javascript" src="./js/utils.js"></script>
+<script type="text/javascript" src="./js/day49/staff.js"></script>
+<script type="text/javascript" src="./js/day49/waiter.js"></script>
+<script type="text/javascript" src="./js/day49/chef.js"></script>
+<script type="text/javascript" src="./js/day49/customer.js"></script>
+<script type="text/javascript" src="./js/day49/cuisines.js"></script>
+<script type="text/javascript" src="./js/day49/restaurant.js"></script>
+<script type="text/javascript" src="./js/day49/renderCanteen.js"></script>
+<script type="text/javascript" src="./js/day49/renderKitchen.js"></script>
+<script type="text/javascript" src="./js/day49/index.js"></script>
+</body>
+</html>
+
