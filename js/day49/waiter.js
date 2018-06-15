@@ -29,6 +29,7 @@ class Waiter extends Staff {
 
 	serve (data) {
 		// 忙于工作
+		// data.staff.setStatus('free')
 		this.setStatus('busy')
 		data.staff = this
 
@@ -50,6 +51,7 @@ class Waiter extends Staff {
 			type: 'waiter'
 		}, 'once')
 
+		log(data.customer.name)
 		Event.pub('canteen_move', {
 			property: {
 				path: customerPath,
@@ -103,15 +105,15 @@ class Waiter extends Staff {
 	}
 
 	order (data) {
-		// 该事件传递至当前服务员，其变得繁忙; 上一个员工变得清闲
-		// 先设置上一个的，因为可能员工没有发生改变，所以后设置当前员工
-		data.staff.setStatus('free')
-		this.setStatus('busy')
+		// // 该事件传递至当前服务员，其变得繁忙; 上一个员工变得清闲
+		// // 先设置上一个的，因为可能员工没有发生改变，所以后设置当前员工
+		// // data.staff.setStatus('free')
+		// this.setStatus('busy')
 		
 		data.staff = this
 
 		Event.pub('canteen_dialog', [data.customer, '好的，请稍等哦。', 'waiter'], 'once')
-
+		log(data.customer.name)
 		let render = data.restaurant.render,
 			waiterPath = render.canteen.getPath(data.customer.name, 'back')
 		Event.pub('canteen_move', {
@@ -134,8 +136,9 @@ class Waiter extends Staff {
 
 	dishup (data) {
 		// 该事件传递至当前服务员，其变得繁忙; 上一个员工变得清闲
-		this.setStatus('busy')
 		data.staff.setStatus('free')
+		this.setStatus('busy')
+		data.staff = this
 
 		let render = data.restaurant.render,
 			waiterPath = render.canteen.getPath(data.customer.name, 'dishup')
@@ -150,12 +153,8 @@ class Waiter extends Staff {
 		}, 'once')
 
 		setTimeout(() => {
-			data.staff = this
-
 			Event.pub('canteen_dialog', [data.customer, '您的菜好了,慢用！', 'waiter'], 'once')
-
 			data.customer.eat(data)
-
 		}, 3 * 1000)
 	}
 

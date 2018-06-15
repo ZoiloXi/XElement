@@ -79,7 +79,7 @@ class RenderKitchen {
 					money: 2000,
 					type: 'customer'
 				})
-				log(customer, 'ok')
+				// log(customer, 'ok')
 				customer.comein()
 			// 解雇职员
 			} else if (t.classList.contains('js-fire')) {
@@ -151,6 +151,7 @@ class RenderKitchen {
 		p.innerText = text
 
 		setTimeout(() => {
+			if (this.restaurant.stillCook.length > 0 || this.restaurant.stillWait.length > 0) return
 			p.innerText = '点击“欢迎客人”开始, 可同时服务多个客人'
 		}, 2000)
 	}

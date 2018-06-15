@@ -7,7 +7,7 @@ class Chef extends Staff {
 		let self = this
 		// 改变工作状态
 		self.setStatus('busy')
-		data.staff.setStatus('free')
+		// data.staff.setStatus('free')
 		// log(data.staff)
 		// 刷新可视化表格中的工作状态
 		Event.pub('kitchen_refresh', data.staff, 'once')
@@ -21,7 +21,7 @@ class Chef extends Staff {
 			current = 0,
 			cooking = cuisines[current],
 			remaining = cuisines.slice(current + 1)
-			log(cuisines, cooking, remaining)
+			cooking.remainTime = cooking.time
 
 		// log('cook', data)
 		let timer = setInterval(() => {

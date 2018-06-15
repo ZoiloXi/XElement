@@ -103,9 +103,6 @@ class RenderCanteen {
 				// 获取已经点了哪些菜
 				cuisines = Array.from(imgs).map(img => img.alt)
 
-				// 存储在对应的点菜位置
-				this.cuisines[data.customer.name] = cuisines
-
 				// 生成对话
 				this.dialog([data.customer, '我点这些：' + cuisines.join(',') + '.', 'customer'])
 				
@@ -115,6 +112,7 @@ class RenderCanteen {
 
 				// 变更data，进行传递
 				data.cuisines = cuisines
+				data.type = 'order'
 				data.customer.order(data)
 			}
 		})
@@ -132,6 +130,13 @@ class RenderCanteen {
 
 	showDesk (data) {
 		let desk = this.desks.filter(d => d.getAttribute('data-isFree') == 'free')[0]
+
+		if (!desk) {
+			data.restaurant.waiting.push(data)
+			Event.pub('kitchen', '座位数不够,请顾客排队吧。', 'once')
+			return
+		}
+
 		desk.setAttribute('id', `customer_${data.customer.name}`)
 		desk.setAttribute('data-isFree', 'busy')
 

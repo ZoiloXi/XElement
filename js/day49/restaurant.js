@@ -9,10 +9,8 @@ class Restaurant {
 		this.chefs = []
 		this.cuisines = []
 		this.available = this.seats
-		this.waiting = []
-
-		// 只做了一般的数据，人员不够时，数据填入此；待雇佣人员后，重新进行
-		this.halfDone = []
+		this.stillWait = []
+		this.stillCook = []
 	}
 
 	hire (staffs) {
@@ -36,8 +34,9 @@ class Restaurant {
 		})
 		// 更新视图
 		Event.pub('kitchen_init', {restaurant: this}, 'once')
-		Event.pub('statusChange', staffs, 'once')
-
+		
+		staffs.forEach(staff => Event.pub('statusChange', staff, 'once'))
+		
 		return this
 	}
 
@@ -132,19 +131,25 @@ class Restaurant {
 			staff[data.type](data)
 		} else {
 			Event.pub('kitchen_prompt', text + '人数不够，需要进行招募啊。', 'once')
-			this.waiting.push(data)
+			if (data.type == 'cook') {
+				this.stillCook.push(data)
+			} else {
+				this.stillWait.push(data)
+			}
 		}
 		
-		// Event.pub('statistic', data, 'once')
 	}
 
 	statusChange (staff) {
-		// 顾客等待分两种，一种是进店没座位等待；一种是点菜时，服务员或者厨师不足等待
-		// this.waiting表明没有顾客等待,不进行处理
-		if (this.waiting.length == 0) return
 
-		let data = this.waiting.shift()	// 获取最先等待的那个顾客信息
-
+		let data
+		if (this.stillWait.length > 0 && staff.type == 'waiter') {
+			data = this.stillWait.shift()
+		} else if (this.stillCook.length > 0 && staff.type == 'chef') {
+			data = this.stillCook.shift()
+		} else {
+			return
+		}
 		Event.pub(data.type, data, 'once')
 	}
 

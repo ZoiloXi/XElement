@@ -32,6 +32,7 @@ class Staff {
 
 	setStatus (status) {
 		this.status = status
+		
 		Event.pub('kitchen_refresh', this, 'once')
 	}
 

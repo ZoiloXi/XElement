@@ -16,9 +16,10 @@ class Customer {
 
 	order (data) {
 		clearInterval(data.timer)
-		// Event.pub('order', data, 'once')
+		
 		data.type = 'order'
 		data.staff.order(data)
+		// Event.pub('order', data, 'once')
 	}
 
 	eat (data) {
