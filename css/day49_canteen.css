@@ -3,11 +3,32 @@ css of .Left and .Right is defined in day49_common.css
 */
 
 /*左侧二级布局容器*/
+.Left {
+	position: relative;
+}
 .Left .desk {
+	position: absolute;
 	width: 50%;	/*only 180px rest for children*/
 	height: 300px;	/*only 280px rest for children*/
 	padding: 10px;
 }
+.desk:nth-of-type(1) {
+	left: 0;
+	top: 0;
+}
+.desk:nth-of-type(2) {
+	left: 300px;
+	top: 0;
+}
+.desk:nth-of-type(3) {
+	left: 0;
+	top: 300px;
+}
+.desk:nth-of-type(4) {
+	left: 300px;
+	top: 300px;
+}
+
 
 .desk .d-header {
 	width: 100%;
@@ -45,7 +66,7 @@ css of .Left and .Right is defined in day49_common.css
 	0% {
 		/*transform: scale(2,2) translate(80px, 50px);*/
 		position: absolute;
-		left: -0px;
+		left: 0px;
 		top: 50px;
 		width: 50px;
 		height: 50px;

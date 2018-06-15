@@ -69,35 +69,15 @@ midnight.hire([Waiter_Lack, Waiter_Lucy, Chef_John])
 		.recipe([fish, vegetable, chicken, noodle])
 
 // 生成渲染函数,渲染页面; 渲染餐厅和厨房
-var render = {
-		canteen: new RenderCanteen(document.querySelector('.Left')),
+const render = {
+		canteen: new RenderCanteen(document.querySelector('.Left'), midnight.seats),
 		kitchen: new RenderKitchen(document.querySelector('.Right'))
 	}
 
-// 开始营业
-var begin = Cust_Villy.comein()
+midnight.render = render
 
-begin.then((data) => {
-// 进入餐厅，餐厅欢迎; 指示服务员进行服务
-	render.kitchen.init(midnight)
+Event.pub('kitchen_init', {restaurant: midnight}, 'once')
 
-	return midnight.welcome(data, render)
-}).then((data) => {
-// 服务员来点餐
-	render.canteen.init(data)
-	return data.staff.serve(data, render)
-}).then((data) => {
+midnight.opening()
 
-	return Cust_Villy.order(data, render)
-}).then((data) => {
-
-	return data.staff.order(data, render)
-}).then((data) => {
-	return Chef_John.cook(data, render)
-}).then((data) => {
-	return Waiter_Lucy.dishup(data, render)
-}).then((data) => {
-	return data.customer.eat(data, render)
-}).catch(err => {
-	log(err)
-})
+// Cust_Villy.comein(render)

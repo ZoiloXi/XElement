@@ -32,11 +32,11 @@ class Staff {
 
 	setStatus (status) {
 		this.status = status
+		Event.pub('kitchen_refresh', this, 'once')
 	}
 
 	greeting () {
 		var text = '大家好, 我是新来的' + this.type + ', 我叫' + this.name + '.'
-		log(text)
 	}
 
 	/** staff 工厂模式

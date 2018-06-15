@@ -3,13 +3,16 @@ class Restaurant {
 		this.name = option.name
 		this.money = option.money
 		this.type = option.type || 'restaurant'
-		this.seats = option.seats
+		this.seats = 4 || option.seats 	// 暂定为4个, 页面放不下
 		this.staffs = []
 		this.waiters = []
 		this.chefs = []
 		this.cuisines = []
 		this.available = this.seats
-		this.quene = []
+		this.waiting = []
+
+		// 只做了一般的数据，人员不够时，数据填入此；待雇佣人员后，重新进行
+		this.halfDone = []
 	}
 
 	hire (staffs) {
@@ -31,6 +34,20 @@ class Restaurant {
 
 			this.money -= staff.salary
 		})
+		// 更新视图
+		Event.pub('kitchen_init', {restaurant: this}, 'once')
+		Event.pub('statusChange', staffs, 'once')
+
+		return this
+	}
+
+	fire (name) {
+		this.staffs = this.staffs.filter(staff => staff.name != name)
+		this.waiters = this.waiters.filter(waiter => waiter.name != name)
+		this.chefs = this.chefs.filter(chef => chef.name != name)
+		// 更新视图
+		Event.pub('kitchen_init', {restaurant: this}, 'once')
+		Event.pub('canteen_destroy', name, 'once')
 
 		return this
 	}
@@ -46,37 +63,94 @@ class Restaurant {
 		let staffs = type == 'waiter' ? this.waiters : this.chefs,
 			staff
 
-		staff =	staffs.filter(staff => {
-			return staff.getStatus() == 'free'
-		})
+		staff =	staffs.filter(staff => staff.getStatus() == 'free')
 
 		return staff[Math.floor(Math.random() * staffs.length)]
 	}
 
-	welcome (data, render) {
-		if (this.available == 0) {
-			this.quene.push(data)
-		}
-		this.available -= 1
-		
+	welcome (data) {
+		// 配置data相应项
 		data.restaurant = this
-		
-		data.staff = this.isRandomFree('waiter')
-		data.staff.setStatus('busy')
-		render.kitchen.refresh(data.staff)
+		data.type = 'usher'
+		Event.pub('usher', data, 'once')
+	}
 
-		return new Promise((resolve, reject) => {
-			// 服务员走过去
-			render.canteen.move({
-				path: 'M 600,10 L 300,550',
-				dur: 4 + 's',
-				fill: 'freeze'
-			}, data.staff.name, 'waiter')
 
-			setTimeout(() => {
-				resolve(data)
-			}, 4000)
+	// 开始营业, 负责事件调度
+	opening () {
+		let self = this
+		// 各个职工开始工作,设置工作状态为空闲，为响应业务做准备；busy表明正在执行业务
+		self.staffs.forEach(staff => {
+			staff.setStatus('free')
 		})
+		// self.statistic()
+
+		// 开始监听各种事件
+		let evtTypes = [
+				'welcome',
+				'usher',
+				'serve',
+				'order',
+				'cook',
+				'dishup',
+				'pay',
+				'hire',
+				'fire',
+				'statusChange',	// 在render.kitchen.refresh()中发布该事件
+				'statistic',
+			];
+
+		for (let i = 0, len = evtTypes.length; i < len; i++) {
+			let type = evtTypes[i]
+			//绑定事件,形如 Event.sub('transaction', self.transaction.bind(self))
+			// Event.sub(evtTypes[i], self[evtTypes[i]].bind(self))
+			if (['usher', 'serve', 'order', 'dishup', 'pay', 'cook', 'dishup'].indexOf(type) > -1) {
+				Event.sub(type, this.dispath.bind(this))
+			} else {
+				Event.sub(type, this[type].bind(this))
+			}
+		}
+
+		return this
+	}
+
+	dispath (data) {
+		var customer = data.customer,
+		staff = null,
+		staffs = [],
+		text
+		// log(data)
+		if (['serve', 'order', 'dishup','pay', 'usher'].indexOf(data.type) > -1) {
+			staff = this.waiters.filter(waiter => waiter.getStatus() == 'free')[0]
+			text = 'waiter'
+		} else if (data.type == 'cook') {
+			staff = this.chefs.filter(chef => chef.getStatus() == 'free')[0]
+			text = 'chef'
+		}
+
+		if (staff) {
+			staff[data.type](data)
+		} else {
+			Event.pub('kitchen_prompt', text + '人数不够，需要进行招募啊。', 'once')
+			this.waiting.push(data)
+		}
+		
+		// Event.pub('statistic', data, 'once')
+	}
+
+	statusChange (staff) {
+		// 顾客等待分两种，一种是进店没座位等待；一种是点菜时，服务员或者厨师不足等待
+		// this.waiting表明没有顾客等待,不进行处理
+		if (this.waiting.length == 0) return
+
+		let data = this.waiting.shift()	// 获取最先等待的那个顾客信息
+
+		Event.pub(data.type, data, 'once')
+	}
+
+	statistic (money) {
+		this.money += money
+		Event.pub('kitchen_refresh', this, 'once')
 	}
 }
 

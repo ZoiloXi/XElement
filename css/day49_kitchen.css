@@ -1,33 +1,61 @@
 /*k means kitchen*/
-.Right .k-dialog, .Right .k-staff {
-	height: 300px;
+.Right .k-dialog, .Right .k-control{
+	height: 200px;
 }
 
 .k-dialog {
-	width: 255px;
+	width: 355px;
 	margin-left: 40px;
 	overflow: auto;
 }
-
-.k-staff {
-	width: 295px;
+.k-control {
+	width: 200px;
+	padding: 30px;
+	overflow: auto;
+}
+.k-control label {
+	display: inline-block;
+	margin-bottom: 30px;
 }
 
-.k-staff .k-info {
-	border-collapse: collapse;
-}
-
-.k-staff .k-info th, .k-staff .k-info td {
-	width: 120px;
-	line-height: 40px;	
-	border: 1px solid steelblue;
+.k-prompt {
+	color: white;
+	font-size: 15px;
 	text-align: center;
+	background: red;
 }
-.k-staff .k-info img {
-	width: 30px;
-	height: 30px;
+
+.k-staffs {
+	width: 100%;
+	height: 400px;
+	overflow: auto;
+}
+
+.k-staffs .k-info {
+	border-collapse: collapse;
+	margin-top: 30px;
+}
+
+.k-info td {
+	width: 60px;
+	height: 40px;
+	text-align: center;
 	vertical-align: middle;
 }
+
+.k-info td:nth-last-child(3) {
+	width: 200px;
+}
+
+.k-info td:nth-last-child(2) {
+	width: 150px;
+}
+
+.k-info img {
+	width: 30px;
+	height: 30px;
+}
+
 .k-info .k-cooking-progress, .d-dishup .d-dishup-progress {
 	display: inline-block;
 	width: 60px;

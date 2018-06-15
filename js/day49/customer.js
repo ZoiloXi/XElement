@@ -10,65 +10,38 @@ class Customer {
 		let data = {
 			customer: this
 		}
-		return new Promise((resolve, reject) => {
-			resolve(data)
-		})
+		data.type = 'welcome'
+		Event.pub('welcome', data, 'once')
 	}
 
-	order (data, render) {
-		
-		return new Promise((resolve, reject) => {
-
-			// 更新时间
-			let counts = 10
-			let timer = setInterval(() => {
-				if (counts == 0) {
-					clearInterval(timer)
-					render.canteen.dialog(data.customer.name, '点菜超时，默认全部点菜', 'waiter')
-					render.canteen.showPanel(data.customer.name, 'dishup')
-
-					data.cuisines = data.restaurant.cuisines.map(c => c.name)
-
-					resolve(data)
-				}
-
-				render.canteen.refresh(data.customer.name, counts + 's', 'time')
-				
-				counts--
-			}, 1000)
-
-			render.canteen.addEvent({
-				resolve: resolve,
-				data: data,
-				timer: timer
-			})
-		})
+	order (data) {
+		clearInterval(data.timer)
+		// Event.pub('order', data, 'once')
+		data.type = 'order'
+		data.staff.order(data)
 	}
 
-	eat (data, render) {
-		let desk = render.canteen.data.map((d,index) => {
-				if (d.customer == data.customer.name) {
-					return render.canteen.desks[index]
-				}
-			})[0],
-			cuisinesDom = data.cuisines.map(c => {
-				return desk.querySelector(`.js-${c}-progress`)
-			}),
-			price = data.restaurant.cuisines
-					.filter(c => data.cuisines.indexOf(c.name) > -1)
-					.map(c => c.price)
-					.reduce((pre,next) => pre + next)
-			log(price)
-		let current = 0
-		let timer = setInterval(() => {
-			if (current == 6) {
+	eat (data) {
+		let render = data.restaurant.render,
+			desk = render.canteen.container.querySelector(`#customer_${data.customer.name}`),
+			cuisinesDom = data.cuisines.map(c => desk.querySelector(`.js-${c}-progress`))
+
+		let current = 0,
+			eatingTime = 6	// 吃饭耗时
+		let	timer = setInterval(() => {
+			if (current == eatingTime) {
 				cuisinesDom.forEach(c => {
 					c.innerText = '吃完啦。'
 					c.style.background = ''
 				})
-				render.canteen.dialog(data.customer.name, '结账。', 'customer')
-				render.canteen.dialog(data.customer.name, `一共是${price}元.下次再来哦。`, 'waiter')
+
 				clearInterval(timer)
+
+				Event.pub('canteen_dialog', [data.customer, '结账。', 'customer'], 'once')
+				data.type = 'pay'
+
+				data.staff.pay(data)
+
 				return
 			}
 			cuisinesDom.forEach(c => {

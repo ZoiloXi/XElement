@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="Left css_bd">
-	<div class="desk css_fl css_bd css_hide">
+	<div class="desk css_bd css_hide">
 		<div class='d-header css_clear'>
 			<span class="css_fl" >
 				<i class="fa fa-user" aria-hidden="true"></i><span class="js-name">{{customer}}</span>
@@ -46,11 +46,33 @@
 	</div>
 </div>
 <div class="Right css_bd">
-	<div class="k-dialog css_fl css_bd"></div>
-	<!-- <div class="k-staff css_fl css_bd"></div>
-	<div class="k-staff css_fl css_bd"></div>
-	<div class="k-staff css_fl css_bd"></div> -->
-	<!-- <div class="k-staff">这个根据有多少职员来生成</div> -->
+	<div class="k-dialog css_fl css_bd js-k-dialog">
+		
+	</div>
+	<div class="k-control css_bd">
+		<label for='hire'>
+			<button  class='js-k-hire'>招聘新人</button><br>
+			<input type="checkbox" name="hire" value='waiter'>Waiter
+			<input type="checkbox" name="hire" value='chef'>Chef
+		</label>
+		<br>
+		<label>
+			<button class='js-k-welcome'>欢迎客人</button>
+		</label>
+	</div>
+	<p class="k-prompt js-k-prompt">点击“欢迎客人”开始, 可同时服务多个客人</p>
+	<div class="k-staffs css-clear css-bd">
+		<table border='1' class='k-info'>
+			<caption class='k-statistic'>midnight canteen 一览表</caption>
+			<thead>
+				<tr><th colspan="6">金钱总额：<span class='js-cash'>ssssss</span></th></tr>
+				<tr><th>工种</th><th>name</th><th>status</th><th>正在做的</th><th>等待做的</th><th>操作</th></tr>
+			</thead>
+			<tbody>
+				
+			</tbody>
+		</table>
+	</div>
 </div>
 
 

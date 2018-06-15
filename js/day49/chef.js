@@ -3,46 +3,50 @@ class Chef extends Staff {
 		super(option)
 	}
 
-	cook (data, render) {
+	cook (data) {
 		let self = this
+		// 改变工作状态
 		self.setStatus('busy')
 		data.staff.setStatus('free')
+		// log(data.staff)
+		// 刷新可视化表格中的工作状态
+		Event.pub('kitchen_refresh', data.staff, 'once')
+		Event.pub('kitchen_refresh', self, 'once')
 
-		render.kitchen.refresh(data.staff)
-		render.kitchen.refresh(self)
-
+		// 重置当前工作职工
 		data.staff = self
 
-		return new Promise((resolve, reject) => {
-			let cuisines = data.restaurant.cuisines.filter(c => {
-				return data.cuisines.indexOf(c.name) > -1
-			}),
-				len = cuisines.length,
-				current = 0,
-				cooking = cuisines[current],
-				remaining = cuisines.slice(current + 1)
-			
-			let timer = setInterval(() => {
-				if (cooking.remainTime == 0) {
-					current++
+		let cuisines = data.restaurant.cuisines.filter(c => data.cuisines.indexOf(c.name) > -1),
+			len = cuisines.length,
+			current = 0,
+			cooking = cuisines[current],
+			remaining = cuisines.slice(current + 1)
+			log(cuisines, cooking, remaining)
 
-					if (current == len) {
-						clearInterval(timer)
-						resolve(data)
-						return
-					}
+		// log('cook', data)
+		let timer = setInterval(() => {
+			if (cooking.remainTime == 0) {
+				current++
 
-					cooking = cuisines[current]
-					remaining = cuisines.slice(current+1)
+				if (current == len) {
+					clearInterval(timer)
+
+					data.type = 'dishup'
+					Event.pub('dishup', data, 'once')
+					return
 				}
-				cooking.remainTime = cooking.remainTime ? --cooking.remainTime : cooking.time
 
-				this.cooking = cooking
-				this.remaining = remaining
-				
-				render.canteen.refresh(data.customer.name, cooking, 'dishup')
-				render.kitchen.refresh(this)
-			}, 1000)
-		})
+				cooking = cuisines[current]
+				remaining = cuisines.slice(current+1)
+			}
+			cooking.remainTime = cooking.remainTime ? --cooking.remainTime : cooking.time
+
+			this.cooking = cooking
+			this.remaining = remaining
+
+			Event.pub('canteen_refresh', [data.customer.name, cooking, 'dishup'], 'once')
+			
+			Event.pub('kitchen_refresh', self, 'once')
+		}, 1000)
 	}
 }

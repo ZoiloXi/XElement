@@ -88,7 +88,7 @@ const utils = {
 			name.push(Math.random() * (123-97) + 97)
 		}
 		name = String.fromCharCode.apply(String, name)
-		name[0] = name[0].toUpperCase()
+		name = name[0].toUpperCase() + name.slice(1)
 		return name
 	},
 
@@ -130,7 +130,6 @@ const utils = {
 
 	svg (name, prop) {
 		let ele = document.createElementNS('http://www.w3.org/2000/svg', name)
-
 		for (let key in prop) {
 			ele.setAttribute(key, prop[key])
 		}
@@ -178,7 +177,7 @@ Event = {
 		let callbacks = Event.events[evt]
 
 		if (type == 'every') {
-			delete Event.events[evt]
+			Event.events[evt] = []
 			callbacks.forEach((cb) => {
 				cb(data)
 			})

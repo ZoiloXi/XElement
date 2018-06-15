@@ -36,6 +36,10 @@ svg {
 	pointer-events: none;
 }
 
+ul {
+	list-style: none;
+}
+
 /*两个顶级容器*/
 .Left, .Right {
 	position: absolute;
