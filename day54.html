@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Baidu IFE - day62</title>
+	<style>
+		#wrapper {
+			background: green;
+		}
+	</style>
+</head>
+<body>
+<svg id='wrapper' width='1200' height='740' xmlns='www.w3.org/2000/svg' transform='scale(0.8) translate(-100, -100)'>
+	<svg id='ground' width='1098.8' height='728.8' x='50.1' y='5.6' xmlns='www.w3.org/2000/svg'></svg>
+	<svg id='players' width='1098.8' height='728.8' x='5' y='5' xmlns='www.w3.org/2000/svg'>
+		<circle id='Meici' cx='20' cy='20' r='10' fill='blue'/>
+		<circle id='Cluo' cx='20' cy='40' r='10' fill='steelblue'/>
+	</svg> 
+</svg>
+
+<script type="text/javascript" src="./js/utils.js"></script>
+<script type="text/javascript" src="./js/day54/Footballer_SVG.js"></script>
+<script type="text/javascript" src="./js/day54/Ground_SVG.js"></script>
+<script type="text/javascript">
+let ground = new Ground({ container: document.querySelector('#ground')})
+ground.draw()
+let Meici = new Footballer({
+	speed: 15,
+	explosive: 15,
+	endurance: 18,
+	restore: 15,
+	element: document.querySelector('svg circle#Meici')
+}), Cluo = new Footballer({
+	speed: 18,
+	explosive: 15,
+	endurance: 15,
+	restore: 10,
+	element: document.querySelector('svg circle#Cluo')
+})
+
+Meici.run(600)
+Cluo.run(600)
+
+</script>
+</body>
+</html>
