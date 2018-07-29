@@ -2,24 +2,32 @@
 <html>
 <head>
 	<title>百度IFE 2018：31-33天</title>
-	<link rel="stylesheet" type="text/css" href="./css/data_panel.css">
+	<link rel="stylesheet" href="./css/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/checkbox.css">
+	<link rel="stylesheet" type="text/css" href="./css/table.css">
+	<link rel="stylesheet" type="text/css" href="./css/barplot.css">
+
+	<style type="text/css">
+		.wrapper_check, #barplot, #lineplot {
+			float: left;
+		}
+	</style>
 </head>
 <body>
 <fieldset>
-	<div id="X-Checkbox" class='checkbox'></div>
-	<div id="X-Checkbox2" class='checkbox'></div>
+	<div class='wrapper_check'>
+		<div id="X-Checkbox" class='checkbox'></div>
+		<div id="X-Checkbox2" class='checkbox'></div>
+	</div>
+	<svg id="barplot" style='width:600px; height:400px; zoom:0.6;' version="1.1" xmlns="http://www.w3.org/2000/svg"></svg>
+	<svg id="lineplot" style='width:600px; height:400px; zoom:0.6;' version="1.1" xmlns="http://www.w3.org/2000/svg"></svg>
 	<div id="X-Table" class='table'></div>
 </fieldset>
-<svg id="svg1" style='width:600px; height:400px' version="1.1" xmlns="http://www.w3.org/2000/svg"></svg>
-<svg id="svg2" style='width:600px; height:400px' version="1.1" xmlns="http://www.w3.org/2000/svg"></svg>
 
-
-<script type="text/javascript">
-	const log = console.log.bind(console)
-</script>
 <script type="text/javascript" src="./js/utils.js"></script>
 <script type="text/javascript" src="./js/raw_data.js"></script>
 <script type="text/javascript" src="./js/table.js"></script>
+<script type="text/javascript" src="./js/table_editable.js"></script>
 <script type="text/javascript" src="./js/checkbox.js"></script>
 <script type="text/javascript" src="./js/dataController.js"></script>
 <script type="text/javascript" src="./js/basicplot.js"></script>
